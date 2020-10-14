@@ -150,6 +150,10 @@ class Instructor extends Lambdasian {
   grade (student, subject) {
     return `${student.name} receives a perfect score on ${subject}`;
   }
+  studentGrade (student) {
+    student.grade = getRandomIntInclusive(1, 100);
+    console.log ("New grade is: ",student.grade);
+  }
 }
 
 /*
@@ -167,12 +171,15 @@ class Instructor extends Lambdasian {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
+
+
 class Student extends Lambdasian {
   constructor (userObject) {
     super(userObject);
     this.previousBackground = userObject.previousBackground;
     this.className = userObject.className;
     this.favSubjects = userObject.favSubjects;
+    this.grade = getRandomIntInclusive(1, 100);
   }
   listSubjects () {
     return `Loving ${this.favSubjects}`;
@@ -182,6 +189,15 @@ class Student extends Lambdasian {
   }
   sprintChallenge (subject) {
     return `${this.name} has begun sprint challenge on ${subject}`;
+  }
+  graduate (instructor) {
+    if (this.grade >= 70) {
+      return `${this.name} is ready to to graduate from Lambda School`;
+    } else {
+      console.log(`${this.name} is not ready to to graduate from Lambda School. ${instructor.name} will check your assigment`);
+      instructor.studentGrade(this);
+      return this.graduate(instructor);
+    }
   }
 }
 
@@ -220,6 +236,18 @@ class ProjectManager extends Instructor {
       + This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
       + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
 */
+
+let testStudent = new Student ({name : "Iaroslav", age: "32", location : "Virginia", previousBackground : "None", className: "web37", favSubjects : "JS"});
+const testInstructor = new Instructor ({name : "Dave", age: "n/a", location : "n/a"});
+testInstructor.studentGrade(testStudent);
+console.log(testStudent.graduate(testInstructor));
+
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+}
 
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
